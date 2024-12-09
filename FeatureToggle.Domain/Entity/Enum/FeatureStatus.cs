@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FeatureToggle.Domain.Entity.FeatureManagementSchema
+namespace FeatureToggle.Domain.Entity.Enum
 {
 
     public enum Actions

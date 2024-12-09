@@ -1,4 +1,4 @@
-﻿using FeatureToggle.Domain.Entity.FeatureManagementSchema;
+﻿using FeatureToggle.Domain.Entity.Enum;
 using MediatR;
 
 namespace FeatureToggle.Application.Requests.Commands.LogCommands

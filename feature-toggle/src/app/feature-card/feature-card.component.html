@@ -13,7 +13,7 @@
                 'status-border-inactive': feature.featureType === 1 && (feature.isEnabled === false || feature.isEnabled === null)
               }">
                 <div class="card-body">
-                    <div class="" style="min-height: 8em;">
+                    <div class="card-body-min-height">
                         <h5 class="card-title">{{ feature.featureName }}</h5>
 
 
@@ -50,7 +50,7 @@
 
                         @if(feature.isEnabled === false || feature.isEnabled === null){
                         <button type="button" class="btn btn-success"
-                            (click)="feature.isEnabled = true; update_Toggle(feature.featureId,null,true)">
+                            (click)="feature.isEnabled = true; updateFeatureToggle(feature.featureId,null,true)">
                             Enable
                         </button>
 
@@ -58,7 +58,7 @@
 
                         @if(feature.isEnabled === true && isAdmin){
                         <button type="button" class="btn btn-danger"
-                            (click)="feature.isEnabled = false; update_Toggle(feature.featureId,null,false)">
+                            (click)="feature.isEnabled = false; updateFeatureToggle(feature.featureId,null,false)">
                             Disable
                         </button>
 

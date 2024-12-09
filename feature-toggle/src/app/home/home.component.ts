@@ -1,84 +1,76 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FeatureCardComponent } from '../feature-card/feature-card.component';
-import { FormsModule } from '@angular/forms';
-import { IselectedFilters } from '../interface/feature.interface';
-import { FeatureService } from '../feature.service';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IFilterForm, ISelectedFilters } from '../interface/feature.interface';
+import { FeatureService } from '../services/feature.service';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, FeatureCardComponent, FormsModule],
+  imports: [NavbarComponent, FeatureCardComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 
-  rtCheckboxSate: boolean = false;
-  ftCheckboxSate: boolean = false;
-  rtEnabledCheckboxesState : boolean = false;
-  enabledCheckboxSate: boolean = false;
-  disabledCheckboxSate: boolean = false;
-  searchBarInput: string ='';
-  
-  selectedFilters2: IselectedFilters = {
-    featureFilter: null,
-    releaseFilter: null,
-    enabledFilter: null,
-    disabledFilter: null,
-    searchQuery: null
-  };
-  
-  @Output() applyFiltersEvent = new EventEmitter<IselectedFilters>(); //
+  selectedFiltersForm = new FormGroup<IFilterForm>({
+    searchQuery: new FormControl<string | null>(null),
+    featureToggleFilter: new FormControl<boolean | null>(null),
+    releaseToggleFilter: new FormControl<boolean | null>(null),
+    enabledFilter: new FormControl<boolean | null>(null),
+    disabledFilter: new FormControl<boolean | null>(null),
+  });
+
+  selectedFiltersFormValue : ISelectedFilters = this.selectedFiltersForm.value; 
+
+  @Output() applyFiltersEvent2 = new EventEmitter<ISelectedFilters>(); 
+
   constructor(private featureService: FeatureService) { }
 
+  ngOnInit(){
+    this.selectedFiltersForm.get('enabledFilter')?.disable();
+    this.selectedFiltersForm.get('disabledFilter')?.disable();
+  } 
+
   applyFilters(): void {
-    this.selectedFilters2 = {
-      featureFilter: null,
-      releaseFilter: null,
-      enabledFilter: null,
-      disabledFilter: null,
-      searchQuery: null
-    };
-
-    this.ftCheckboxSate === true ? this.selectedFilters2.featureFilter = true : this.selectedFilters2.featureFilter = null;
-    this.rtCheckboxSate === true ? this.selectedFilters2.releaseFilter = true : this.selectedFilters2.releaseFilter = null;
-    this.enabledCheckboxSate === true ? this.selectedFilters2.enabledFilter = true : this.selectedFilters2.enabledFilter = null;
-    this.disabledCheckboxSate === true ? this.selectedFilters2.disabledFilter = true : this.selectedFilters2.disabledFilter = null;
-    this.searchBarInput !== null||'' ? this.selectedFilters2.searchQuery = this.searchBarInput : this.selectedFilters2.searchQuery = null
-
-    this.applyFiltersEvent.emit(this.selectedFilters2);
-
+    this.selectedFiltersFormValue = this.selectedFiltersForm.value;
+    this.applyFiltersEvent2.emit(this.selectedFiltersFormValue);
   }
 
   rtOptionsCheck(){
-    if(!this.rtCheckboxSate){
-      this.enabledCheckboxSate = false;
-      this.disabledCheckboxSate = false;
+    if(this.selectedFiltersForm.value.releaseToggleFilter === false 
+      ||this.selectedFiltersForm.value.releaseToggleFilter === null 
+    ){
+      this.selectedFiltersForm.get('featureToggleFilter')?.enable();
+      this.selectedFiltersForm.get('enabledFilter')?.setValue(null);
+      this.selectedFiltersForm.get('enabledFilter')?.disable();
+      this.selectedFiltersForm.get('disabledFilter')?.setValue(null);
+      this.selectedFiltersForm.get('disabledFilter')?.disable();
+    }
+    else{
+      this.selectedFiltersForm.get('featureToggleFilter')?.disable();
+      this.selectedFiltersForm.get('featureToggleFilter')?.setValue(null);
+      this.selectedFiltersForm.get('enabledFilter')?.enable();
+      this.selectedFiltersForm.get('disabledFilter')?.enable();
     }
   }
 
   clearRtOptions(){
-    this.rtCheckboxSate = false;
-    this.enabledCheckboxSate = false;
-    this.disabledCheckboxSate = false;
+   if(this.selectedFiltersForm.value.featureToggleFilter){
+    this.selectedFiltersForm.get('releaseToggleFilter')?.setValue(null);
+    this.selectedFiltersForm.get('releaseToggleFilter')?.disable();
+   }
+   else{
+    this.selectedFiltersForm.get('releaseToggleFilter')?.enable();
+    this.selectedFiltersForm.get('releaseToggleFilter')?.setValue(null);
+   }
   }
 
   removeFilters(){
-    this.rtCheckboxSate = false;
-    this.ftCheckboxSate = false;
-    this.rtEnabledCheckboxesState = false;
-    this.enabledCheckboxSate = false;
-    this.disabledCheckboxSate = false;
-    this.searchBarInput =''; 
-
-      this.selectedFilters2 = {
-      featureFilter: null,
-      releaseFilter: null,
-      enabledFilter: null,
-      disabledFilter: null,
-      searchQuery: null
-    };
+    this.selectedFiltersForm.reset();
+    this.selectedFiltersForm.get('releaseToggleFilter')?.enable();
+    this.selectedFiltersForm.get('featureToggleFilter')?.enable();
   }
 }

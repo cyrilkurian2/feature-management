@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FeatureService } from '../../feature.service';
 import { Router, RouterLink } from '@angular/router';
 import { ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { ISignUpAccept, ISignUpForm, ISignUpReturn } from '../../interface/feature.interface';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder,
-    private userService: FeatureService,
+    private authService: AuthService,
     private router: Router,
     private toastr: ToastrService
   ) {
@@ -52,7 +52,7 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.userService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
   }
@@ -71,7 +71,7 @@ export class SignupComponent implements OnInit {
       }
 
 
-      this.userService.addUser(userData).subscribe({
+      this.authService.addUser(userData).subscribe({
         next: (response: ISignUpReturn) => {
           if (response.success) {
             this.toastr.success('New user created!', 'Registration Successful');

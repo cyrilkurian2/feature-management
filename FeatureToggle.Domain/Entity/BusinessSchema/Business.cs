@@ -2,8 +2,8 @@
 {
     public class Business
     {
-        public int BusinessId { get; private set; }
-        public string BusinessName { get; private set; }
+        public int BusinessId { get;  }
+        public string BusinessName { get;  } = string.Empty;
         
     }
 }

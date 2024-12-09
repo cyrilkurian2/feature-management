@@ -30,7 +30,7 @@ namespace FeatureToggle.Application.Requests.Queries.Login
                         new Claim("UserID",user.Id.ToString()),
                         new Claim("IsAdmin",user.IsAdmin.ToString())
                     ]),
-                    Expires = DateTime.UtcNow.AddHours(12),
+                    Expires = DateTime.UtcNow.AddHours(_optionsMonitor.CurrentValue.ExpiryTime),
                     SigningCredentials = new SigningCredentials(signInKey,SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _optionsMonitor.CurrentValue.Issuer,
                     Audience = _optionsMonitor.CurrentValue.Audience,

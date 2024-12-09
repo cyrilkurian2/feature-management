@@ -6,3 +6,23 @@
 .dialog-actions{
     justify-content: center;
 }
+
+.search-select-panel {
+    .search-field {
+      width: 100%;
+      padding: 8px 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+  
+    mat-option {
+      display: flex;
+      align-items: center;
+      height: auto;
+    }
+  
+    mat-form-field {
+      margin: 0;
+    }
+  }
+  

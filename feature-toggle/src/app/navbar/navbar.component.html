@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <div class="container-fluid mx-3 py-1 rounded-4" style="background-color: rgb(5,9,73)">
+  <div class="container-fluid mx-3 py-1 rounded-4 navbar-bg-color">
     <a class="navbar-brand text-light p-2" href="#">Feature Manager</a>
     <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-        @if(isAdmin === 1){
+        @if(isAdmin){
         <li>
           <a class="ms-2 my-1 btn btn-light" [routerLink]="['/log']">Logs</a>
         </li>

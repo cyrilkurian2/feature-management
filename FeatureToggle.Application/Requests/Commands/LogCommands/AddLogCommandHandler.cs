@@ -9,7 +9,6 @@ namespace FeatureToggle.Application.Requests.Commands.LogCommands
         public async Task Handle(AddLogCommand request, CancellationToken cancellationToken)
         {
             Log log = new(request.UserId,
-                          request.UserName,
                           request.FeatureId,
                           request.FeatureName,
                           request.BusinessId,

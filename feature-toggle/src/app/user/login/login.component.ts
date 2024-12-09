@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { FeatureService } from '../../feature.service';
 import { ILoginAccept, ILoginForm, ILoginReturn } from '../../interface/feature.interface';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth.service';
 
 
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private router: Router,
-    private userService: FeatureService,
+    private authService: AuthService,
     private toastr: ToastrService
   ) {
     this.userForm = this.fb.group({
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.userService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
   }
@@ -47,11 +47,12 @@ export class LoginComponent implements OnInit {
         password: this.userForm.value.password ?? ''
       }
 
-      this.userService.login(userDetails).subscribe({
+      this.authService.login(userDetails).subscribe({
         next: (response: ILoginReturn) => {
 
           if (response.token !== null) {
-            this.userService.saveToken(response.token);
+            this.authService.saveToken(response.token);
+            this.authService.checkIsAdmin();
             this.router.navigate(['/home']);
             this.toastr.success('Welcome back!', 'Login Successful');
             this.isLoading = false;

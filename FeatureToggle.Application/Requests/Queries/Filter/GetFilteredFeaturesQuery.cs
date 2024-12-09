@@ -11,11 +11,11 @@ namespace FeatureToggle.Application.Requests.Queries.Filter
     public class GetFilteredFeaturesQuery : IRequest<PaginatedFeatureListDTO>
     {
         public int PageNumber { get; set; }
+        public string? SearchQuery { get; set; }
         public bool? FeatureToggleFilter { get; set; }
         public bool? ReleaseToggleFilter { get; set; }
-        public bool? IsEnabledFilter { get; set; } 
-        public bool? IsDisabledFilter { get; set; } 
-        public string? SearchQuery { get; set; }
+        public bool? EnabledFilter { get; set; } 
+        public bool? DisabledFilter { get; set; }
                 
     }
 }

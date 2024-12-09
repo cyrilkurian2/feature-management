@@ -10,6 +10,8 @@ namespace FeatureToggle.Domain.Configurations
         {
             builder.ToTable("Business", "business");
 
+            builder.HasKey(x => x.BusinessId);
+
             builder.Property(x => x.BusinessName).IsRequired()
                     .HasColumnType("nvarchar").HasMaxLength(20);
 

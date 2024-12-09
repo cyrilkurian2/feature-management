@@ -12,6 +12,10 @@ namespace FeatureToggle.Domain.Configurations
 
             builder.Property(x => x.Time)
                .IsRequired();
+
+            builder.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

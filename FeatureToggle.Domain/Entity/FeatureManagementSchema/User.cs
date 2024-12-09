@@ -11,10 +11,10 @@ namespace FeatureToggle.Domain.Entity.FeatureManagementSchema
         }
         public new string UserName
         {
-            get => base.UserName;
+            get => base.UserName ?? string.Empty;
             private set => base.UserName = value;
         }
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
         public bool IsAdmin { get; private set; }
 
         public User() { }

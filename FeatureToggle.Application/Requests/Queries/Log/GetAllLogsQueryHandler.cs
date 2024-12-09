@@ -13,19 +13,20 @@ using CsvHelper;
 using System.IO;
 using System.Globalization;
 using System;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FeatureToggle.Application.Requests.Queries.Log
 {
-    public class GetAllLogsQueryHandler(FeatureManagementContext featureManagementContext) : IRequestHandler<GetAllLogsQuery, List<LogDTO>>
+    public class GetAllLogsQueryHandler(FeatureManagementContext featureManagementContext) : IRequestHandler<GetAllLogsQuery, FileContentResult>
     {
-        public async Task<List<LogDTO>> Handle(GetAllLogsQuery request, CancellationToken cancellationToken)
+        public async Task<FileContentResult> Handle(GetAllLogsQuery request, CancellationToken cancellationToken)
         {
-            List<LogDTO> query = await featureManagementContext.Logs
+            List<LogDTO> query = await featureManagementContext.Logs.Include(u => u.User)
                .Select(x => new LogDTO
                {
                    LogId = x.Id,
-                   UserId = x.UserId,
-                   UserName = x.UserName,
+                   UserName = x.User.UserName,
                    FeatureId = x.FeatureId,
                    FeatureName = x.FeatureName,
                    BusinessId = x.BusinessId,
@@ -35,10 +36,24 @@ namespace FeatureToggle.Application.Requests.Queries.Log
 
                })
                .OrderByDescending(x => x.Time)
-               .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
 
-            return query;
+            
+            using (MemoryStream memoryStream = new())
+            {
+                using (StreamWriter streamWriter = new(memoryStream))
+                using (CsvWriter csvWriter = new(streamWriter, CultureInfo.InvariantCulture))
+                {
+                    csvWriter.WriteRecords(query);
+                    streamWriter.Flush();
+                }
+
+                FileContentResult result = new(memoryStream.ToArray(), "text/csv");
+                return result;
+            }
+
 
         }
+
     }
 }

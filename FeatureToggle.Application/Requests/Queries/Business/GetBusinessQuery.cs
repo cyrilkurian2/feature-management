@@ -8,8 +8,9 @@ using MediatR;
 
 namespace FeatureToggle.Application.Requests.Queries.Business
 {
-    public class GetEnabledBusinessQuery : IRequest<List<GetBusinessDTO>>
+    public class GetBusinessQuery : IRequest<List<GetBusinessDTO>>
     {
         public int FeatureId { get; set; }
+        public bool FeatureStatus { get; set; } 
     }
 }

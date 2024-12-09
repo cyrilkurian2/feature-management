@@ -27,9 +27,9 @@
             IsEnabled = true;
         }
 
-        public void UpdateIsenabled (bool incoming)
+        public void UpdateIsenabled (bool isEnabled)
         {
-           IsEnabled = incoming;
+           IsEnabled = isEnabled;
         }
 
 

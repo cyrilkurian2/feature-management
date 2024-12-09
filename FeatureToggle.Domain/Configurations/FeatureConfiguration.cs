@@ -10,7 +10,7 @@ namespace FeatureToggle.Domain.Configurations
         public void Configure(EntityTypeBuilder<Feature> builder)
         {
             builder.ToTable("Feature", "business");
-
+            builder.HasKey(x => x.FeatureId);
             builder.Property(x => x.FeatureName).IsRequired()
                      .HasColumnType("nvarchar").HasMaxLength(50);
 

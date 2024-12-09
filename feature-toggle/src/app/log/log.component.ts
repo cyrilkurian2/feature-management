@@ -3,10 +3,11 @@ import { MatTableModule } from '@angular/material/table';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { OnInit } from '@angular/core';
 import { IPaginationLog } from '../interface/feature.interface';
-import { FeatureService } from '../feature.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../services/auth.service';
+import { FeatureService } from '../services/feature.service';
 
 @Component({
   selector: 'app-log',
@@ -20,6 +21,8 @@ export class LogComponent implements OnInit {
   searchBarInput: string = '';
   isLoading: boolean = true ;
 
+  displayedColumns: string[] = ['serialNo', 'Username', 'FeatureId', 'FeatureName', 'BusinessId', 'BusinessName', 'Date', 'Time', 'Action'];
+
   dataSource: IPaginationLog = {
     pageSize: 0,
     currentPage: 0,
@@ -28,16 +31,19 @@ export class LogComponent implements OnInit {
     logs: []
   };
 
-  constructor(private featureService: FeatureService, private toastr: ToastrService) { }
+  constructor(private authService: AuthService, private featureService: FeatureService ,private toastr: ToastrService) { }
   ngOnInit(): void {
     this.fetchPaginatedLog();
   }
 
-  displayedColumns: string[] = ['serialNo', 'UserId', 'Username', 'FeatureId', 'FeatureName', 'BusinessId', 'BusinessName', 'Date', 'Time', 'Action'];
-
   fetchPaginatedLog() {
     this.featureService.getLog(this.pageNumber, this.searchBarInput).subscribe({
       next: (response: IPaginationLog) => {
+        
+        response.logs.forEach(log => {
+          log.time = new Date(log.time + 'Z');
+        });
+
         this.dataSource = response;
         this.isLoading = false;
         if (this.dataSource.logs.length === 0) {
@@ -78,6 +84,7 @@ export class LogComponent implements OnInit {
 
 
   downloadTrigger() {
+    this.isLoading = true;
     this.featureService.downloadLogs().subscribe({
       next: (response_blob) => {
         const timestamp = Date.now();
@@ -87,8 +94,8 @@ export class LogComponent implements OnInit {
         a.download = `feature-logs_${timestamp}.csv`;
         a.click();
         URL.revokeObjectURL(objectUrl);
-
         this.toastr.success('Download successful!', 'Download');
+        this.isLoading = false;
 
       },
       error: (error) => {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FeatureService } from '../feature.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,21 +11,19 @@ import { FeatureService } from '../feature.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  isAdmin: number | undefined;
+  isAdmin: boolean = false;
 
 
   constructor(private router: Router,
     private toastr: ToastrService,
-    private featureService: FeatureService
+    private authService: AuthService
   ) {
 
-    const payload = this.featureService.decodeToken();
-
-    payload.IsAdmin === "True" ? this.isAdmin = 1 : this.isAdmin = 0;
+    this.isAdmin = this.authService.checkIsAdmin();
   }
 
   onLogout() {
-    this.featureService.deleteToken();
+    this.authService.deleteToken();
     this.router.navigate(['/user/login']);
     this.toastr.success('See you later!', 'Logout Successful');
   }

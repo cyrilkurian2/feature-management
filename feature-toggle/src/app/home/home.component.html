@@ -1,69 +1,78 @@
 <app-navbar></app-navbar>
 
 
-    <div class="container-fluid d-flex justify-content-center">
-        <div class="w-50 mx-5 mt-3">
-            <form class="navbar-form navbar-left ">
-                <div class="d-flex">
-                    <input type="text" [(ngModel)]="searchBarInput" class="form-control" placeholder="Search" name="searchQuery" />
-                    <!--Filter Dropdown-->
-                    <div class="dropdown">
-                       
-                        <button type="button" class="btn btn-primary ms-3" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-filter"></i></button>
-                        <ul class="dropdown-menu" style="min-width: 12rem;" aria-labelledby="dropdownMenuButton1">
-                
-                            <div class="mx-3">
-                                <li>
-                                    <div class="form-check mt-1">
-                                        <input class="form-check-input" type="checkbox" id="filterAction1" [(ngModel)]="ftCheckboxSate"  [disabled]="rtCheckboxSate" name="featuretogglecb" (click)="clearRtOptions()">
-                                        <label class="form-check-label" for="filterAction1">
-                                            Feature Toggle
-                                        </label>
-                                    </div>
-                                </li>
-                                <hr>
-                                <li>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="filterAction2" name="rtCheckbox" [(ngModel)]="rtCheckboxSate"  [disabled]="ftCheckboxSate" (change)="rtOptionsCheck()" name="releasetogglecb">
-                                        <label class="form-check-label" for="filterAction2">
-                                            Release Toggle
-                                        </label>
-                                    </div>
-                                </li>
-                
-                                <li>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="filterAction3" [(ngModel)]="enabledCheckboxSate" [disabled]="ftCheckboxSate || !rtCheckboxSate" name="enabledcb">
-                                        <label class="form-check-label" for="filterAction3">
-                                            Enabled
-                                        </label>
-                                    </div>
-                                </li>
-                
-                                <li>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="filterAction4" [(ngModel)]="disabledCheckboxSate" [disabled]="ftCheckboxSate || !rtCheckboxSate" name="disabledcb">
-                                        <label class="form-check-label" for="filterAction4">
-                                            Disabled
-                                        </label>
-                                    </div>
-                                </li>
-                                <li class="text-center">
-                                    <button type="submit" class="btn btn-primary my-2" (click)="removeFilters()">
-                                        Remove Filters
-                                    </button>
-                                </li>
-                            </div>
-                        </ul>
-                    </div>
-                <button type="submit" class="btn btn-primary ms-3 w-25" (click)="applyFilters();">Search
-                    Feature</button>
-            </div>
+<div class="container-fluid d-flex justify-content-center">
+    <div class="w-50 mx-5 mt-3">
+        <form [formGroup]="selectedFiltersForm" class="navbar-form navbar-left">
+            <div class="d-flex">
+                <!-- Search Query Input -->
+                <input type="text" formControlName="searchQuery" class="form-control" placeholder="Search" />
 
+                <!-- Filter Dropdown -->
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary ms-3" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-filter"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <div class="mx-3">
+                            <!-- Feature Toggle -->
+                            <li>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" id="filterAction1"
+                                        formControlName="featureToggleFilter" (change)="clearRtOptions()" />
+                                    <label class="form-check-label" for="filterAction1">
+                                        Feature Toggle
+                                    </label>
+                                </div>
+                            </li>
+                            <hr />
+                            <!-- Release Toggle -->
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="filterAction2"
+                                        formControlName="releaseToggleFilter" (change)="rtOptionsCheck()"/>
+                                    <label class="form-check-label" for="filterAction2" >
+                                        Release Toggle
+                                    </label>
+                                </div>
+                            </li>
+                            <!-- Enabled -->
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="filterAction3"
+                                        formControlName="enabledFilter" />
+                                    <label class="form-check-label" for="filterAction3">
+                                        Enabled
+                                    </label>
+                                </div>
+                            </li>
+                            <!-- Disabled -->
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="filterAction4"
+                                        formControlName="disabledFilter" />
+                                    <label class="form-check-label" for="filterAction4">
+                                        Disabled
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="text-center">
+                                <button type="button" class="btn btn-primary my-2" (click)="removeFilters()">
+                                    Remove Filters
+                                </button>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary ms-3 w-25" (click)="applyFilters()">
+                    Search Feature
+                </button>
+            </div>
         </form>
     </div>
 
 
 </div>
 
-<app-feature-card [selectedFilters]="selectedFilters2" (applyFilters)="applyFilters()"></app-feature-card>
+<app-feature-card [selectedFilters]="selectedFiltersFormValue" (applyFilters)="applyFilters()"></app-feature-card>
