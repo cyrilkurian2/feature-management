@@ -4,15 +4,11 @@ using RabbitMQ.Client;
 
 namespace FeatureToggle.Application.RabbitMQEventBus
 {
-    public class RabbitMQPublisher : IEventBus
+    public class RabbitMQPublisher(string exchangeName) : IEventBus
     {
-        private string _exchangeName ;
+        private string _exchangeName = exchangeName;
         private IConnection _connection;
         private IChannel _channel;
-        public RabbitMQPublisher(string exchangeName)
-        {
-            _exchangeName = exchangeName;
-        }
 
         public async Task InitializeAsync(string connectionString)
         {
@@ -31,7 +27,7 @@ namespace FeatureToggle.Application.RabbitMQEventBus
                     durable: true,
                     exclusive: false,
                     autoDelete: false
-                );
+            );
 
             await _channel.QueueBindAsync(
                 queue: "feature-update-queue",

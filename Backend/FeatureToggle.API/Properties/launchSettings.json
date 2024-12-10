@@ -35,7 +35,7 @@
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080",
-  
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://+:8081:8081;http://+:8080",
   
