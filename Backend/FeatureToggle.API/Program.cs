@@ -18,11 +18,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // builder.WebHost.ConfigureKestrel(options =>
 // {
-//     options.ListenLocalhost(8080, listenOptions =>
+//     // Listen on HTTP port
+//     options.ListenAnyIP(8080);
+
+
+//     // Listen on HTTPS port (8081), using a certificate
+//     options.ListenAnyIP(8081, listenOptions =>
 //     {
+//         // Specify the certificate file and its password
 //         listenOptions.UseHttps("https-certificate.pfx", "12345");
 //     });
 // });
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.HttpsPort = 8081; // Match the HTTPS port used in Kestrel
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
